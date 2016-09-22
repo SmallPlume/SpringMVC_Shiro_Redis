@@ -6,6 +6,12 @@
 <%@include file="common/head.jsp"%>
 <title>首页</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="${basePath}js/modules/main/index.js"></script>
+<script type="text/javascript">
+	//初始化
+	index.init();
+</script>
+
 <title>Index</title>
 </head>
 <body>
@@ -13,9 +19,11 @@
 	<div class="container">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<span class="text-left">欢迎<shiro:principal/>登录！</span>
-				<span class="text-center">用户列表</span>
-				<p class="text-right"><a href="${basePath }logout">退出</a></p>
+				<h3 class="text-center">用户列表</h3>
+				<p class="text-right">
+					<span>欢迎<shiro:principal/>登录！</span>
+					<a href="${basePath }logout">退出</a>
+				</p>
 			</div>
 			<div class="panel-body">
 				<table class="table table-bordered table-hover">
@@ -34,9 +42,9 @@
 								<td>${v.username }</td>
 								<td>${v.rolename }</td>
 								<td>
-									<a href="${basePath }user/view" class="btn btn-primary">查看</a>
-									<a href="${basePath }user/edit" class="btn btn-primary">修改</a>
-									<shiro:hasRole name="admin"><a href="${basePath }user/del" class="btn btn-primary">删除</a></shiro:hasRole>
+									<a href="javascript:void(0);" class="btn btn-primary" id="view" onclick="index.openShow(index.url.viewUrl, '查看信息')">查看</a>
+									<a href="javascript:index.openShow(index.url.editUrl, '修改信息')" class="btn btn-primary" id="edit">修改</a>
+									<shiro:hasRole name="admin"><a href="javascript:alert('删除');" class="btn btn-primary" id="delt">删除</a></shiro:hasRole>
 								</td>
 							</tr>
 						</c:forEach>

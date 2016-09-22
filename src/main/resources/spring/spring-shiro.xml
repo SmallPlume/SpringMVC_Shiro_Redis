@@ -77,9 +77,9 @@
 				/ueditor/**=anon
 				<!-- alibaba的druid监控器 -->
 				/druid/**=roles["admin"]
-				/user/**=roles["admin"]
-				/user/view=perms["user:view"]
-				/user/edit=perms["user:edit"]
+				<!-- /user/**=roles["admin"] -->
+				<!-- /user/view=perms["user:view"]
+				/user/edit=perms["user:edit"] -->
 				/**=authc
 			</value>
 		</property>

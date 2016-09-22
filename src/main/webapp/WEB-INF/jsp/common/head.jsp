@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
@@ -12,21 +13,23 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<!-- ä¸è¿°3ä¸ªmetaæ ç­¾*å¿é¡»*æ¾å¨æåé¢ï¼ä»»ä½å¶ä»åå®¹é½*å¿é¡»*è·éå¶åï¼ -->
 
-<!-- 新 Bootstrap 核心 CSS 文件 -->
+<!-- æ° Bootstrap æ ¸å¿ CSS æä»¶ -->
 <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<!-- jQueryæä»¶ãå¡å¿å¨bootstrap.min.js ä¹åå¼å¥ -->
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<!-- ææ°ç Bootstrap æ ¸å¿ JavaScript æä»¶ -->
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<!-- jQuery cookie操作插件 -->
+<!-- jQuery cookieæä½æä»¶ -->
 <script src="//cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<!-- jQery countDonw倒计时插件  -->
+<!-- jQery countDonwåè®¡æ¶æä»¶  -->
 <script src="//cdn.bootcss.com/jquery.countdown/2.1.0/jquery.countdown.min.js"></script>
-
+<!-- 根目录 -->
 <script type="text/javascript" src="${basePath}js/modules/main/main.js"></script>
+<!-- 弹出框 -->
+<script type="text/javascript" src="${basePath}layer/layer.js"></script>
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

@@ -31,7 +31,8 @@ public class myRealm extends AuthorizingRealm {
 		String userName = (String)principals.getPrimaryPrincipal();
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 		//获取帐号角色
-		authorizationInfo.setRoles(userService.getRoleByName(userName));
+		Set<String> roles = userService.getRoleByName(userName);
+		authorizationInfo.setRoles(roles);
 		//获取帐号权限
 		Set<String> permis = userService.getPermitByName(userName);
 		authorizationInfo.setStringPermissions(permis);
