@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
+	
+	<!-- Redis连接池的配置信息 -->
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<!-- 最大Idle -->
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		<!-- 说明一个pool可以有多少个Jedis实例 -->
+		<property name="maxTotal" value="${redis.maxActive}" /> <!-- maxActive为低级版本，maxTotal为最新版本 -->
+		<!--最大等待wait时间 -->
+		<property name="maxWaitMillis" value="${redis.maxWait}" /> <!-- maxWait为低级版本，maxWaitMillis为最新版本 -->
+		<!-- return 一个jedis实例给pool时，是否检查连接可用性（ping()） -->
+		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
+		<property name="testOnReturn" value="${redis.testOnReturn}" />
+	</bean>
+
+	<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
+		<constructor-arg index="0" ref="poolConfig" />
+		<constructor-arg index="1">
+			<list>
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg name="host" value="${redis.host}" />
+                    <constructor-arg name="port" value="${redis.port}" />
+                    <constructor-arg name="timeout" value="${redis.timeout}" />
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="redisDataSource" class="org.redis.service.impl.RedisDataSourceImpl">
+		<property name="shardedJedisPool" ref="shardedJedisPool" />
+	</bean>
+	
+	<bean id="redisClientTemplate" class="org.redis.web.RedisClientTemplate">
+		<property name="redisDataSource" ref="redisDataSource" />
+	</bean>
+</beans>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<!-- 缓存管理器 使用Ehcache实现 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:ehcache.xml" />
+	</bean>
+	
+	<!-- shiro dao -->
+	<bean id="sessionDAO" class="org.shiro.dao.RedisSessionDao">
+		<property name="template" ref="redisClientTemplate" />
+		<!-- 单位：秒，30分钟 -->
+        <property name="timeToLiveSeconds" value="1800"/>
+    </bean>
+	
+	<!-- 会话验证调度器，每隔一段时间清理失效的用户session -->
+	<bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">
+		 <!--单位：毫秒； 间隔多少时间检查，不配置是60分钟，现在配置的是30分钟 -->
+	     <property name="interval" value="18000000"/>
+	     <property name="sessionManager" ref="sessionManager"/>
+	</bean>
+	
+	<!-- 会话Cookie模板会话Cookie模板  -->
+    <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+    	<!-- cookie的name -->
+        <constructor-arg value="sid"/>
+        <property name="httpOnly" value="true"/>
+        <!-- maxAge=-1表示浏览器关闭时失效此Cookie -->
+        <property name="maxAge" value="-1"/>
+    </bean>
+	
+	<!-- Session 管理器 -->
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<!-- 单位：毫秒；设置ehcache全局会话超时时间，默认30分钟，即如果30分钟内没有访问会话将过期 -->
+		<property name="globalSessionTimeout" value="1800000" />
+		<property name="sessionDAO" ref="sessionDAO" />
+		<!-- 间隔多少时间检查，不配置是60分钟 -->
+		<property name="sessionValidationScheduler" ref="sessionValidationScheduler"></property>
+		<!-- 是否开启 检测，默认开启 -->
+		<property name="sessionValidationSchedulerEnabled" value="true"/>
+		<!-- 删除失效的session -->
+		<property name="deleteInvalidSessions" value="true" />
+		<!-- 会话Cookie模板 -->
+		<property name="sessionIdCookie" ref="sessionIdCookie"/>
+	</bean>
+	
+	<!-- 自定义realm -->
+	<bean id="myRealm" class="org.shiro.realm.myRealm" />
+	
+	<!-- 安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="myRealm" />
+		<property name="sessionManager" ref="sessionManager" />
+		<!-- Ehcache 缓存 -->
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
+
+	<!-- shiro拦截器 -->
+	<bean id="shiroFilter" class="org.shiro.web.MyShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/login" />
+		<property name="successUrl" value="/index" />
+		<property name="unauthorizedUrl" value="/unauthor" />
+		<property name="filterChainDefinitions">
+			<value>
+				<!-- 静态资源 -->
+				/css/**=anon
+				/js/**=anon
+				/ico/**=anon
+				/images/**=anon
+				/ueditor/**=anon
+				<!-- alibaba的druid监控器 -->
+				/druid/**=roles["admin"]
+				/user/**=roles["admin"]
+				/user/view=perms["user:view"]
+				/user/edit=perms["user:edit"]
+				/**=authc
+			</value>
+		</property>
+	</bean>
+
+	<!-- shiro 权限注解 抛出异常 指定跳转的页面(unauthor.jsp) -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.apache.shiro.authz.UnauthorizedException">/unauthor</prop>
+                <prop key="org.apache.shiro.authz.UnauthenticatedException">/login</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

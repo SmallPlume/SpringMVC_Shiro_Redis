@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.modules.sys.dao.userDAO">
+	
+	<!-- 查询帐号查询密码 -->
+	<select id="getUserByName" parameterType="java.lang.String" resultType="com.modules.sys.entity.User">
+		select userName as username,password as password from t_user where userName = #{username}
+	</select>
+	
+	<!-- 根据帐号查询用户角色信息 -->
+	<select id="getRoleByName" parameterType="java.lang.String" resultType="java.lang.String">
+		select r.roleNo from t_user u,t_role r where u.roleId = r.id and u.userName= #{username}
+	</select>
+	
+	<!-- 根据帐号查询权限 -->
+	<select id="getPermitByName" parameterType="java.lang.String" resultType="java.lang.String">
+		select 
+			p.permitNo 
+		from 
+			t_user u,t_role r,t_permission p,t_role_permit rp 
+		where 
+			u.roleId=r.id 
+			and rp.roleId=r.id 
+			and rp.permissionId=p.id 
+			and p.permitNo IS NOT NULL 
+			and u.userName=#{username}
+	</select>
+	
+	<!-- 查询所有用户 -->
+	<select id="queryUser" resultType="com.modules.sys.entity.User">
+		select u.id as id,u.userName as username,r.roleName as rolename from t_user u,t_role r where u.roleId=r.id
+	</select>
+</mapper>
