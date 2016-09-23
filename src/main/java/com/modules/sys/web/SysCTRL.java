@@ -59,6 +59,10 @@ public class SysCTRL {
 	 */
 	@RequestMapping(value="/login",method=RequestMethod.GET)
 	public String login(){
+		Subject subject=SecurityUtils.getSubject();
+		if(subject.getPrincipal()!=null){
+			return "redirect:/index";
+		}
 		template.set("aa", "10086");
 		return "login";
 	}
