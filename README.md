@@ -8,3 +8,6 @@
   - redis:2.8.0;
   
 #  项目URL：http://localhost:8080/SpringMVC_Shiro_Redis/login
+![image](https://github.com/SmallPlume/SpringMVC_Shiro_Redis/blob/master/src/main/webapp/images/p1.png)
+![image](https://github.com/SmallPlume/SpringMVC_Shiro_Redis/blob/master/src/main/webapp/images/p2.png)
+![image](https://github.com/SmallPlume/SpringMVC_Shiro_Redis/blob/master/src/main/webapp/images/p3.png)
