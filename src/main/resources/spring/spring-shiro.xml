@@ -23,7 +23,7 @@
 	<bean id="sessionValidationScheduler"
 		class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">
 		<!--单位：毫秒； 间隔多少时间检查，不配置是60分钟，现在配置的是30分钟 -->
-		<property name="interval" value="18000000" />
+		<property name="interval" value="1800000" />
 		<property name="sessionManager" ref="sessionManager" />
 	</bean>
 
