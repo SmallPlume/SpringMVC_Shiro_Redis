@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:p="http://www.springframework.org/schema/p" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
-	
+	<context:property-placeholder location="classpath:redis.properties"
+		ignore-unresolvable="true" />
+
 	<!-- Redis连接池的配置信息 -->
 	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
 		<!-- 最大Idle -->
@@ -29,17 +29,17 @@
 			<list>
 				<bean class="redis.clients.jedis.JedisShardInfo">
 					<constructor-arg name="host" value="${redis.host}" />
-                    <constructor-arg name="port" value="${redis.port}" />
-                    <constructor-arg name="timeout" value="${redis.timeout}" />
+					<constructor-arg name="port" value="${redis.port}" />
+					<constructor-arg name="timeout" value="${redis.timeout}" />
 				</bean>
 			</list>
 		</constructor-arg>
 	</bean>
-	
+
 	<bean id="redisDataSource" class="org.redis.service.impl.RedisDataSourceImpl">
 		<property name="shardedJedisPool" ref="shardedJedisPool" />
 	</bean>
-	
+
 	<bean id="redisClientTemplate" class="org.redis.web.RedisClientTemplate">
 		<property name="redisDataSource" ref="redisDataSource" />
 	</bean>
