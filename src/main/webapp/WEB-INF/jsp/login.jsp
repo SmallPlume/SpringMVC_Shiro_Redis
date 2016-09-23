@@ -7,7 +7,6 @@
 <title>登录页</title>
 <script type="text/javascript" src="${basePath}js/modules/main/login.js"></script>
 <script type="text/javascript">
-//解决iframe窗体丢失Session时登录窗口显示在子页面的问题
 $(function() {
 	//初始化
 	login.init();
