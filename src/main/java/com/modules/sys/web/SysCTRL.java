@@ -36,11 +36,21 @@ public class SysCTRL {
 	 */
 	@RequestMapping(value="/index",method=RequestMethod.GET)
 	public String index(Model model){
-		System.out.println("aa======"+template.get("aa"));
+		System.out.println("aa="+template.get("aa"));
 		
 		List<User> list = service.queryUser();
 		model.addAttribute("list",list);
 		return "index";
+	}
+	
+	/**
+	 * 首页
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/",method=RequestMethod.GET)
+	public String indexOther(Model model){
+		return "redirect:/index";
 	}
 	
 	/**
@@ -58,7 +68,7 @@ public class SysCTRL {
 	 * @param request
 	 * @param model
 	 */
-	@RequestMapping(value = "/login", method=RequestMethod.POST)
+	@RequestMapping(value = "/login", method=RequestMethod.POST,produces = {"application/json; charset=utf-8" })
     public @ResponseBody Result submitLoginForm(User user,HttpServletRequest request,Model model) {
         String errorClassName = (String) request.getAttribute("shiroLoginFailure");
         if (UnknownAccountException.class.getName().equals(errorClassName)) {

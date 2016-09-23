@@ -25,6 +25,7 @@ $(document).keyup(function(event) {
 		<div class="panel panel-default">
 			<div class="panel-heading text-center">
 				<h3>用户登录</h3>
+				<span>(密码加密这些就不做了，各有各的加密方法)</span>
 			</div>
 			<div class="panel-body">
 				<form action="login" id="form">

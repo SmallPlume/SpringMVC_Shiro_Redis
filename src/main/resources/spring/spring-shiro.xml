@@ -20,8 +20,7 @@
 	</bean>
 
 	<!-- 会话验证调度器，每隔一段时间清理失效的用户session -->
-	<bean id="sessionValidationScheduler"
-		class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">
+	<bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">
 		<!--单位：毫秒； 间隔多少时间检查，不配置是60分钟，现在配置的是30分钟 -->
 		<property name="interval" value="1800000" />
 		<property name="sessionManager" ref="sessionManager" />
@@ -29,7 +28,7 @@
 
 	<!-- 会话Cookie模板会话Cookie模板 -->
 	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-		<!-- cookie的name -->
+		<!-- cookie在浏览器的name -->
 		<constructor-arg value="sid" />
 		<property name="httpOnly" value="true" />
 		<!-- maxAge=-1表示浏览器关闭时失效此Cookie -->
@@ -47,19 +46,17 @@
 	<!-- rememberMe管理器 -->
 	<bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
 		<!-- rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度（128 256 512 位） -->
-		<property name="cipherKey"
-			value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}" />
+		<property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}" />
 		<property name="cookie" ref="rememberMeCookie" />
 	</bean>
 
 	<!-- Session 管理器 -->
-	<bean id="sessionManager"
-		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
 		<!-- 单位：毫秒；设置ehcache全局会话超时时间，默认30分钟，即如果30分钟内没有访问会话将过期 -->
 		<property name="globalSessionTimeout" value="1800000" />
 		<property name="sessionDAO" ref="sessionDAO" />
 		<!-- 间隔多少时间检查，不配置是60分钟 -->
-		<property name="sessionValidationScheduler" ref="sessionValidationScheduler"></property>
+		<property name="sessionValidationScheduler" ref="sessionValidationScheduler" />
 		<!-- 是否开启 检测，默认开启 -->
 		<property name="sessionValidationSchedulerEnabled" value="true" />
 		<!-- 删除失效的session -->
@@ -99,7 +96,8 @@
 				<entry key="anyRoles" value-ref="anyRoles" />
 			</map>
 		</property>
-		<!-- shiro连接约束配置,在这里使用自定义的 从数据库中动态获取资源， 直接赋值ShiroFilterFactoryBean的filterChainDefinitionMap， 
+		<!-- shiro连接约束配置,在这里使用自定义的 从数据库中动态获取资源， 
+			直接赋值ShiroFilterFactoryBean的filterChainDefinitionMap， 
 			不用赋值 filterChainDefinitions了 -->
 		<property name="filterChainDefinitionMap" ref="DynamicUrls" />
 	</bean>

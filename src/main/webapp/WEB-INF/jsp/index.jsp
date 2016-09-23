@@ -20,6 +20,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="text-center">用户列表</h3>
+				<span>这里，以管理员(admin)角色是可以操作所有功能点的，而一般用户(employee)在数据库配置只有查看功能，其中删除功能按钮使用shiro标签做限制，修改功能页面没有限制，但后台也做了shiro注解，总之，各种各样都写下^_^</span>
 				<p class="text-right">
 					<span>欢迎<shiro:principal/>登录！</span>
 					<a href="${basePath }logout">退出</a>
