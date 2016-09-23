@@ -11,11 +11,6 @@
 $(function() {
 	//初始化
 	login.init();
-	
-	//解决iframe窗体丢失Session时登录窗口显示在子页面的问题
-    if (top.location != self.location) {
-        top.location = self.location;
-    }
 });
 //键盘回车事件
 $(document).keyup(function(event) {
