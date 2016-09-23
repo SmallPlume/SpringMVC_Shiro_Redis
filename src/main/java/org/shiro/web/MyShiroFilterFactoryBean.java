@@ -14,6 +14,11 @@ import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.shiro.web.servlet.MyShiroHttpServletResponse;
 import org.springframework.beans.factory.BeanInitializationException;
 
+/**
+ * 去掉JESSIONID
+ * @author Administrator
+ *
+ */
 public class MyShiroFilterFactoryBean extends ShiroFilterFactoryBean {
 
 private SecurityManager securityManager;

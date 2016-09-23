@@ -29,7 +29,6 @@
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
-							<th style="display: none;">id</th>
 							<th>用户</th>
 							<th>角色</th>
 							<th>操作</th>
@@ -38,13 +37,12 @@
 					<tbody>
 						<c:forEach var="v" items="${list }">
 							<tr>
-								<td style="display: none;">${v.id }</td>
 								<td>${v.username }</td>
 								<td>${v.rolename }</td>
 								<td>
 									<a href="javascript:void(0);" class="btn btn-primary" id="view" onclick="index.openShow(index.url.viewUrl, '查看信息')">查看</a>
-									<a href="javascript:index.openShow(index.url.editUrl, '修改信息')" class="btn btn-primary" id="edit">修改</a>
-									<shiro:hasRole name="admin"><a href="javascript:alert('删除');" class="btn btn-primary" id="delt">删除</a></shiro:hasRole>
+									<a href="javascript:index.openShow(index.url.editUrl, '修改信息')" class="btn btn-primary">修改</a>
+									<shiro:hasRole name="admin"><a href="javascript:alert(${v.id });" class="btn btn-primary">删除</a></shiro:hasRole>
 								</td>
 							</tr>
 						</c:forEach>

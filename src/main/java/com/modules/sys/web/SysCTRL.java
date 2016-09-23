@@ -86,7 +86,7 @@ public class SysCTRL {
 		return "unauthor";
 	}
 	
-	/**===================**/
+	/**==========【user操作】==========**/
 	
 	/**
 	 * 只有查看权限才能查看
@@ -94,7 +94,6 @@ public class SysCTRL {
 	@RequiresPermissions("user:view")
 	@RequestMapping(value="/user/view",method=RequestMethod.GET)
 	public String userView(){
-		System.out.println("==========view==========");
 		return "user/userView";
 	}
 	
@@ -105,7 +104,6 @@ public class SysCTRL {
 	@RequiresPermissions("user:edit")
 	@RequestMapping(value="/user/edit",method=RequestMethod.GET)
 	public String userEdit(){
-		System.out.println("==========edit==========");
 		return "user/userEdit";
 	}
 	

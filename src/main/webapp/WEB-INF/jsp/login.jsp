@@ -51,7 +51,7 @@ $(document).keyup(function(event) {
 						</tr>
 						<tr>
 							<td></td>
-							<td><input type="checkbox" id="ck" /><label for="ck">请记住我</label></td>
+							<td><input type="checkbox" name="rememberMe" id="ck" /><label for="ck">请记住我(30 Day)</label></td>
 						</tr>
 						<tr>
 							<td colspan="2">

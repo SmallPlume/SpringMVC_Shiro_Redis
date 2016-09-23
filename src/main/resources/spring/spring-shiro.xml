@@ -12,7 +12,7 @@
 		<property name="cacheManagerConfigFile" value="classpath:ehcache.xml" />
 	</bean>
 	
-	<!-- shiro dao -->
+	<!-- shiroDAO接口 -->
 	<bean id="sessionDAO" class="org.shiro.dao.RedisSessionDao">
 		<property name="template" ref="redisClientTemplate" />
 		<!-- 单位：秒，30分钟 -->
@@ -34,6 +34,21 @@
         <!-- maxAge=-1表示浏览器关闭时失效此Cookie -->
         <property name="maxAge" value="-1"/>
     </bean>
+    
+    <!-- 用户信息 remenberME -->
+	<bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<constructor-arg value="rememberMe" />
+		<property name="httpOnly" value="true" />
+		<!-- 30天 -->
+		<property name="maxAge" value="2592000" />
+	</bean>
+	
+	<!-- rememberMe管理器 -->
+	<bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+		<!-- rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度（128 256 512 位）-->
+		<property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}" />
+		<property name="cookie" ref="rememberMeCookie" />
+	</bean>
 	
 	<!-- Session 管理器 -->
 	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
@@ -50,6 +65,13 @@
 		<property name="sessionIdCookie" ref="sessionIdCookie"/>
 	</bean>
 	
+	<!-- 
+		自定义的RolesFilter 修改权限如：
+		role["admin","employee"]，表示要满足同时拥有两个角色，
+		相当于 ‘And’ 问题，将And关系改为Or，只要满足其中一个角色即可。 
+	-->
+	<bean id="anyRoles" class="org.shiro.web.filter.authz.RolesAuthorizationFilter" />
+	
 	<!-- 自定义realm -->
 	<bean id="myRealm" class="org.shiro.realm.myRealm" />
 	
@@ -59,14 +81,35 @@
 		<property name="sessionManager" ref="sessionManager" />
 		<!-- Ehcache 缓存 -->
 		<property name="cacheManager" ref="cacheManager" />
+		<!-- 记住me -->
+		<property name="rememberMeManager" ref="rememberMeManager"/>
 	</bean>
 
 	<!-- shiro拦截器 -->
 	<bean id="shiroFilter" class="org.shiro.web.MyShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
+		<!-- 登录页 -->
 		<property name="loginUrl" value="/login" />
+		<!-- 验证成功跳转的页面 -->
 		<property name="successUrl" value="/index" />
+		<!-- 权限认证失败，则跳转到指定页面 -->
 		<property name="unauthorizedUrl" value="/unauthor" />
+		<property name="filters">
+			<map>
+				<entry key="anyRoles" value-ref="anyRoles" />
+			</map>
+		</property>
+		<!-- 
+			shiro连接约束配置,在这里使用自定义的 从数据库中动态获取资源，
+			直接赋值ShiroFilterFactoryBean的filterChainDefinitionMap，
+			不用赋值 filterChainDefinitions了
+		-->
+		<property name="filterChainDefinitionMap" ref="DynamicUrls" />
+	</bean>
+	
+	<!-- 动态拦截url,修改的话，重启才生效 -->
+	<bean id="DynamicUrls" class="org.shiro.bean.DynamicUrls">
+		<!-- Shiro连接约束配置,即过滤链的定义 -->
 		<property name="filterChainDefinitions">
 			<value>
 				<!-- 静态资源 -->
@@ -76,11 +119,13 @@
 				/images/**=anon
 				/ueditor/**=anon
 				<!-- alibaba的druid监控器 -->
-				/druid/**=roles["admin"]
+				<!-- /druid/**=anyRoles["admin"] -->
 				<!-- /user/**=roles["admin"] -->
+				<!-- /user/**=roles[admin]-->
 				<!-- /user/view=perms["user:view"]
 				/user/edit=perms["user:edit"] -->
-				/**=authc
+				<!-- 所有的都需要验证 -->
+				<!-- /**=authc -->
 			</value>
 		</property>
 	</bean>
