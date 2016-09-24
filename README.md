@@ -11,3 +11,5 @@
 ![image](https://github.com/SmallPlume/SpringMVC_Shiro_Redis/blob/master/src/main/webapp/images/p1.png)
 ![image](https://github.com/SmallPlume/SpringMVC_Shiro_Redis/blob/master/src/main/webapp/images/p2.png)
 ![image](https://github.com/SmallPlume/SpringMVC_Shiro_Redis/blob/master/src/main/webapp/images/p3.png)
+![image](https://github.com/SmallPlume/SpringMVC_Shiro_Redis/blob/master/src/main/webapp/images/p4.png)
+![image](https://github.com/SmallPlume/SpringMVC_Shiro_Redis/blob/master/src/main/webapp/images/p5.png)
