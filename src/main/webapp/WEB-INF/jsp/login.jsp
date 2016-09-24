@@ -1,18 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE>
 <html>
 <head>
 <%@include file="common/head.jsp"%>
 <title>登录页</title>
 <script type="text/javascript" src="${basePath}js/modules/main/login.js"></script>
 <script type="text/javascript">
+//解决iframe窗体丢失Session时登录窗口显示在子页面的问题
 $(function() {
 	//初始化
 	login.init();
+	
+    if (top.location != self.location) {
+        top.location = self.location;
+    }
 });
 //键盘回车事件
-$(document).keyup(function(event) {
+$(document).keyup(function(event){
     if (event.keyCode == 13) {
         login.login();
     }
@@ -36,7 +41,11 @@ $(document).keyup(function(event) {
 				<table class="table table-condensed">
 					<thead>
 						<tr>
-							<th colspan="2"><h4 class="text-center text-danger" id="info"></h4></th>
+							<th colspan="2">
+								<h4 class="text-center text-danger" id="info">
+									<c:if test="${not empty param.kickout}">您被踢出登录！</c:if>
+								</h4>
+							</th>
 						</tr>
 					</thead>
 					<tbody>

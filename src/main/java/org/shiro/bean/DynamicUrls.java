@@ -19,9 +19,9 @@ public class DynamicUrls implements FactoryBean<Ini.Section> {
 		Ini.Section section = ini.getSection(Ini.DEFAULT_SECTION_NAME);
 		// alibaba的druid监控器 
 		// /druid/**=anyRoles["admin"]
-		// /**=authc
+		// /**=kickout,authc
 		section.put("/druid/**", "anyRoles[admin]");
-		section.put("/**", "authc");
+		section.put("/**", "kickout,authc");
 		return section;
 	}
 

@@ -62,6 +62,32 @@ public class RedisClientTemplate {
         }
         return result;
     }
+    
+    /**
+     * 设置单个值
+     * 
+     * @param key
+     * @param value
+     * @return
+     */
+    public String set(String key, byte[] value) {
+        String result = null;
+
+        ShardedJedis shardedJedis = redisDataSource.getRedisClient();
+        if (shardedJedis == null) {
+            return result;
+        }
+        boolean broken = false;
+        try {
+            result = shardedJedis.set(key.getBytes(), value);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            broken = true;
+        } finally {
+            redisDataSource.returnResource(shardedJedis, broken);
+        }
+        return result;
+    }
 
     /**
      * 获取单个值
@@ -235,6 +261,13 @@ public class RedisClientTemplate {
         return result;
     }
 
+    /**
+     * 会确保字符串足够长以便将 value 设置在指定的偏移量上
+     * @param key
+     * @param offset
+     * @param value
+     * @return
+     */
     public long setrange(String key, long offset, String value) {
         ShardedJedis shardedJedis = redisDataSource.getRedisClient();
         long result = 0;

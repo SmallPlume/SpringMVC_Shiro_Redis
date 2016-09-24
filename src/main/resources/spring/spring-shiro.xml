@@ -12,7 +12,7 @@
 		<property name="cacheManagerConfigFile" value="classpath:ehcache.xml" />
 	</bean>
 
-	<!-- shiroDAO接口 -->
+	<!-- shiroDAO接口,自定义DAO，将session存放redis -->
 	<bean id="sessionDAO" class="org.shiro.dao.RedisSessionDao">
 		<property name="template" ref="redisClientTemplate" />
 		<!-- 单位：秒，30分钟 -->
@@ -64,6 +64,15 @@
 		<!-- 会话Cookie模板 -->
 		<property name="sessionIdCookie" ref="sessionIdCookie" />
 	</bean>
+	
+	<!-- 并发登录控制 -->
+	<bean id="kickoutSessionControlFilter" class="org.shiro.web.filter.KickoutSessionControlFilter">
+		<property name="cacheManager" ref="cacheManager"/>  
+	    <property name="sessionManager" ref="sessionManager"/>  
+	    <property name="kickoutAfter" value="false"/>  
+	    <property name="maxSession" value="1"/>  
+	    <property name="kickoutUrl" value="/login?kickout=1"/>
+	</bean>
 
 	<!-- 自定义的RolesFilter 修改权限如： role["admin","employee"]，表示要满足同时拥有两个角色， 相当于 
 		‘And’ 问题，将And关系改为Or，只要满足其中一个角色即可。 -->
@@ -94,6 +103,7 @@
 		<property name="filters">
 			<map>
 				<entry key="anyRoles" value-ref="anyRoles" />
+				<entry key="kickout" value-ref="kickoutSessionControlFilter"/>
 			</map>
 		</property>
 		<!-- shiro连接约束配置,在这里使用自定义的 从数据库中动态获取资源， 
@@ -113,6 +123,7 @@
 				/ico/**=anon
 				/images/**=anon
 				/ueditor/**=anon
+				/layer/**=anon
 				<!-- alibaba的druid监控器 -->
 				<!-- /druid/**=anyRoles["admin"] -->
 				<!-- /user/**=roles["admin"] -->
@@ -122,6 +133,11 @@
 				<!-- /**=authc -->
 			</value>
 		</property>
+	</bean>
+	
+	<!-- session操作类 -->
+	<bean id="activityUserHelper" class="org.shiro.web.helper.ActivityUserHelper">
+		<property name="sessionDAO" ref="sessionDAO" />
 	</bean>
 	
 	<!-- AOP式方法级权限检查   这两个类主要用于注解-->

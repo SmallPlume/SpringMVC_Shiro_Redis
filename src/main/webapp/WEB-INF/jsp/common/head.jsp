@@ -28,6 +28,7 @@
 <script src="//cdn.bootcss.com/jquery.countdown/2.1.0/jquery.countdown.min.js"></script>
 <!-- 根目录 -->
 <script type="text/javascript" src="${basePath}js/modules/main/main.js"></script>
+
 <!-- 弹出框 -->
 <script type="text/javascript" src="${basePath}layer/layer.js"></script>
 

@@ -10,6 +10,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.redis.web.RedisClientTemplate;
+import org.shiro.web.helper.ActivityUserHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,9 @@ public class SysCTRL {
 	private RedisClientTemplate template;
 	
 	@Autowired
+	private ActivityUserHelper activity;
+	
+	@Autowired
 	private UserService service;
 
 	/**
@@ -40,6 +44,7 @@ public class SysCTRL {
 		System.out.println("aa="+template.get("aa"));
 		
 		List<User> list = service.queryUser();
+		onLine(list);
 		model.addAttribute("list",list);
 		return "index";
 	}
@@ -93,9 +98,27 @@ public class SysCTRL {
 		return "redirect:/login";
 	}
 	
+	/**
+	 * 没有权限指定页面
+	 * @return
+	 */
 	@RequestMapping(value="/unauthor",method=RequestMethod.GET)
 	public String unauthor(){
 		return "unauthor";
+	}
+	
+	/**
+	 * 判断用户是否在线
+	 * @param user
+	 * @return
+	 */
+	private List<User> onLine(List<User> userList){
+		if(userList.size()>0){
+			for (User user : userList) {
+				user.setLine(activity.getActivityUser(user.getUsername()));
+			}
+		}
+		return userList;
 	}
 	
 	/**==========【user操作】==========**/
@@ -119,6 +142,19 @@ public class SysCTRL {
 		return "user/userEdit";
 	}
 	
-	
+	/**
+	 * 踢出登录用户
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/user/kick",method = RequestMethod.POST)
+	public @ResponseBody Result loginout(String id,User locUser){
+		User user = service.getUser(id);
+		if(locUser.getId().equals(user.getId())){
+			return Result.error("请点击退出按钮");
+		}
+		Result r = activity.forceQuit(user.getUsername());
+		return r;
+	}
 	
 }

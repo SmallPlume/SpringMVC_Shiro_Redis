@@ -33,5 +33,12 @@ public interface UserService {
 	 * @return
 	 */
 	public List<User> queryUser();
+	
+	/**
+	 * 根据id查询用户信息
+	 * @param id
+	 * @return
+	 */
+	public User getUser(String id);
 
 }

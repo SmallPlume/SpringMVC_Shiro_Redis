@@ -46,4 +46,12 @@ public class UserServiceImpl implements UserService {
 		return dao.queryUser();
 	}
 
+	@Override
+	public User getUser(String id) {
+		if(!StringUtils.isEmpty(id)){
+			return dao.findOne(id);
+		}
+		return null;
+	}
+
 }

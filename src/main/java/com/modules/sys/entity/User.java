@@ -12,6 +12,9 @@ public class User {
 	
 	/**-------与数据库无关属性--------**/
 	private String rolename;
+	
+	//是否在线
+	private String line;
 
 	public String getId() {
 		return id;
@@ -52,5 +55,13 @@ public class User {
 	public void setRolename(String rolename) {
 		this.rolename = rolename;
 	}
-	
+
+	public String getLine() {
+		return line;
+	}
+
+	public void setLine(String line) {
+		this.line = line;
+	}
+
 }

@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 查询帐号查询密码 -->
 	<select id="getUserByName" parameterType="java.lang.String" resultType="com.modules.sys.entity.User">
-		select userName as username,password as password from t_user where userName = #{username}
+		select id as id, userName as username,password as password from t_user where userName = #{username}
 	</select>
 	
 	<!-- 根据帐号查询用户角色信息 -->
@@ -31,5 +31,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 查询所有用户 -->
 	<select id="queryUser" resultType="com.modules.sys.entity.User">
 		select u.id as id,u.userName as username,r.roleName as rolename from t_user u,t_role r where u.roleId=r.id
+	</select>
+	
+	<!-- 根据id查询用户 -->
+	<select id="findOne" parameterType="java.lang.String" resultType="com.modules.sys.entity.User">
+		select id as id, userName as username from t_user where id=#{id}
 	</select>
 </mapper>
