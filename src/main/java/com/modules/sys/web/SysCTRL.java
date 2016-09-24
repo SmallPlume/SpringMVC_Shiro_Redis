@@ -147,6 +147,7 @@ public class SysCTRL {
 	 * @param id
 	 * @return
 	 */
+	@RequiresRoles("admin")
 	@RequestMapping(value="/user/kick",method = RequestMethod.POST)
 	public @ResponseBody Result loginout(String id,User locUser){
 		User user = service.getUser(id);
