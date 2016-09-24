@@ -8,6 +8,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.redis.web.RedisClientTemplate;
 import org.shiro.web.helper.ActivityUserHelper;
@@ -147,6 +148,7 @@ public class SysCTRL {
 	 * @param id
 	 * @return
 	 */
+	@RequiresRoles("admin")
 	@RequestMapping(value="/user/kick",method = RequestMethod.POST)
 	public @ResponseBody Result loginout(String id,User locUser){
 		User user = service.getUser(id);
