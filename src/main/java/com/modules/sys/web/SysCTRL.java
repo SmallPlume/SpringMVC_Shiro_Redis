@@ -36,6 +36,7 @@ public class SysCTRL {
 	 */
 	@RequestMapping(value="/index",method=RequestMethod.GET)
 	public String index(Model model){
+		//测试jedis
 		System.out.println("aa="+template.get("aa"));
 		
 		List<User> list = service.queryUser();
@@ -59,10 +60,7 @@ public class SysCTRL {
 	 */
 	@RequestMapping(value="/login",method=RequestMethod.GET)
 	public String login(){
-		Subject subject=SecurityUtils.getSubject();
-		if(subject.getPrincipal()!=null){
-			return "redirect:/index";
-		}
+		//测试jedis
 		template.set("aa", "10086");
 		return "login";
 	}
@@ -92,7 +90,7 @@ public class SysCTRL {
 	public String logout(){
 		Subject subject=SecurityUtils.getSubject();
 		subject.logout();
-		return "login";
+		return "redirect:/login";
 	}
 	
 	@RequestMapping(value="/unauthor",method=RequestMethod.GET)

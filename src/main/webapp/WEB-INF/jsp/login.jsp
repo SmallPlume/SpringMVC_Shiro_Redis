@@ -20,12 +20,16 @@ $(document).keyup(function(event) {
 </script>
 </head>
 <body>
+	<!-- 如果用户之前登录过了，直接跳转到登录页面 -->
+	<shiro:authenticated>
+		<% response.sendRedirect(basePath + "index"); %>
+	</shiro:authenticated>
 	<div class="head"><br/></div>
 	<div class="col-xs-3 col-md-offset-4 container">
 		<div class="panel panel-default">
 			<div class="panel-heading text-center">
 				<h3>用户登录</h3>
-				<span>(密码加密这些就不做了，各有各的加密方法)</span>
+				<span class="text-danger">(密码加密这些就不做了，各有各的加密方法)</span>
 			</div>
 			<div class="panel-body">
 				<form action="login" id="form">
